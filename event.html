@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Мероприятие — KidsMap</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- HERO IMAGE -->
+  <div class="event-hero" id="eventHero">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <div class="action-btns-float">
+      <button class="fav-btn" id="favBtn" onclick="toggleFav()">♡</button>
+      <button class="fav-btn" onclick="shareEvent()">⬆</button>
+    </div>
+    <span class="card-emoji" id="heroEmoji">🎨</span>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="event-content">
+    <h1 id="eventTitle">Рисование акварелью</h1>
+
+    <div class="rating-row">
+      <span class="stars">★★★★☆</span>
+      <span class="rating-num" id="eventRating">4.2</span>
+      <span class="reviews-count" id="eventReviews">· 18 отзывов</span>
+    </div>
+
+    <div class="info-block">
+      <div class="info-row">
+        <span class="icon">📍</span>
+        <div>
+          <div class="label">Адрес</div>
+          <div class="value" id="eventAddress">ул. Токтогула 88</div>
+        </div>
+        <button class="btn-secondary" style="margin-left:auto;padding:8px 14px;font-size:13px"
+                onclick="openMap()">На карте</button>
+      </div>
+      <div class="info-row">
+        <span class="icon">🕐</span>
+        <div>
+          <div class="label">Расписание</div>
+          <div class="value" id="eventSchedule">Пн, Ср, Пт · 15:00–16:30</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <span class="icon">👶</span>
+        <div>
+          <div class="label">Возраст · Мест</div>
+          <div class="value" id="eventAge">6–10 лет · 8 мест</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">О мероприятии</p>
+    <p style="font-size:14px;color:var(--hint);line-height:1.7;margin-bottom:16px" id="eventDesc">
+      Занятия акварелью для детей в уютной студии. Педагог с 10-летним опытом работы с детьми. 
+      Все материалы включены в стоимость. Максимум 8 детей в группе для индивидуального внимания.
+      Дети учатся смешивать цвета, создавать текстуры и выражать эмоции через рисунок.
+    </p>
+
+    <p class="section-title">Отзывы</p>
+
+    <div class="review-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="reviewer">Айгуль М.</span>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">Дочка 7 лет, обожает ходить! Педагог терпелив и умеет с детьми.</p>
+    </div>
+
+    <div class="review-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="reviewer">Нурлан К.</span>
+        <span class="review-stars">★★★★☆</span>
+      </div>
+      <p class="review-text">Хорошее место, удобное расположение. Сыну очень нравится.</p>
+    </div>
+
+    <div class="review-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="reviewer">Гульнара А.</span>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">Уже 3 месяца ходим. Видим реальный прогресс у ребёнка!</p>
+    </div>
+
+  </div>
+
+  <!-- STICKY BUY BAR -->
+  <div class="sticky-buy">
+    <div class="price-big" id="eventPrice">500 с <span style="font-size:14px;color:var(--hint);font-weight:400">/ занятие</span></div>
+    <button class="btn-primary" onclick="buyTicket()">Купить билет</button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Главная</span>
+    </a>
+    <a href="favorites.html" class="nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span>Избранное</span>
+    </a>
+    <a href="tickets.html" class="nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/></svg>
+      <span>Билеты</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Профиль</span>
+    </a>
+  </nav>
+
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  const events = {
+    watercolor: {
+      emoji: '🎨', bg: 'linear-gradient(135deg,#b2e0e8,#f9c0a0)',
+      title: 'Рисование акварелью', rating: '4.2', reviews: '18 отзывов',
+      address: 'ул. Токтогула 88', lat: 42.8746, lng: 74.5698,
+      schedule: 'Пн, Ср, Пт · 15:00–16:30', age: '6–10 лет · 8 мест',
+      price: '500 с', stars: '★★★★☆'
+    },
+    football: {
+      emoji: '⚽', bg: 'linear-gradient(135deg,#a8d8a8,#b8e0f0)',
+      title: 'Футбол для малышей', rating: '4.7', reviews: '32 отзыва',
+      address: 'Парк Ататюрка', lat: 42.8700, lng: 74.5900,
+      schedule: 'Сб, Вс · 10:00–11:30', age: '3–6 лет · 12 мест',
+      price: '400 с', stars: '★★★★★'
+    },
+    theatre: {
+      emoji: '🎭', bg: 'linear-gradient(135deg,#e8c0e8,#f0d0b8)',
+      title: 'Театральный кружок', rating: '4.5', reviews: '12 отзывов',
+      address: 'ДК Манас', lat: 42.8760, lng: 74.5650,
+      schedule: 'Вт, Чт · 16:00–17:30', age: '4–8 лет · 10 мест',
+      price: '350 с', stars: '★★★★★'
+    },
+    chess: {
+      emoji: '♟️', bg: 'linear-gradient(135deg,#ffd8a8,#ffe8c0)',
+      title: 'Шахматная школа', rating: '4.9', reviews: '45 отзывов',
+      address: 'ул. Чуй 120', lat: 42.8720, lng: 74.5750,
+      schedule: 'Пн–Пт · 14:00–15:00', age: '5–9 лет · 6 мест',
+      price: '600 с', stars: '★★★★★'
+    },
+    swim: {
+      emoji: '🏊', bg: 'linear-gradient(135deg,#a0d4f0,#c8f0e8)',
+      title: 'Плавание для детей', rating: '4.6', reviews: '28 отзывов',
+      address: 'Бассейн Динамо', lat: 42.8690, lng: 74.5620,
+      schedule: 'Сб, Вс · 09:00–10:00', age: '5–12 лет · 8 мест',
+      price: '700 с', stars: '★★★★★'
+    },
+    english: {
+      emoji: '🔤', bg: 'linear-gradient(135deg,#f8e0a0,#f0c8d0)',
+      title: 'Английский для малышей', rating: '4.3', reviews: '21 отзыв',
+      address: 'ул. Байтик Баатыра', lat: 42.8780, lng: 74.5800,
+      schedule: 'Пн, Ср · 11:00–12:00', age: '3–7 лет · 6 мест',
+      price: '550 с', stars: '★★★★☆'
+    }
+  };
+
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || 'watercolor';
+  const ev = events[id] || events.watercolor;
+
+  document.getElementById('eventHero').style.background = ev.bg;
+  document.getElementById('heroEmoji').textContent = ev.emoji;
+  document.getElementById('eventTitle').textContent = ev.title;
+  document.querySelector('.stars').textContent = ev.stars;
+  document.getElementById('eventRating').textContent = ev.rating;
+  document.getElementById('eventReviews').textContent = '· ' + ev.reviews;
+  document.getElementById('eventAddress').textContent = ev.address;
+  document.getElementById('eventSchedule').textContent = ev.schedule;
+  document.getElementById('eventAge').textContent = ev.age;
+  document.getElementById('eventPrice').innerHTML = ev.price + ' <span style="font-size:14px;color:var(--hint);font-weight:400">/ занятие</span>';
+  document.title = ev.title + ' — KidsMap';
+
+  function toggleFav() {
+    const btn = document.getElementById('favBtn');
+    const isFav = btn.textContent === '♥';
+    btn.textContent = isFav ? '♡' : '♥';
+    btn.style.color = isFav ? '' : '#e05';
+    haptic('medium');
+  }
+
+  function openMap() {
+    const url = `https://maps.google.com/?q=${ev.lat},${ev.lng}`;
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.openLink(url);
+    } else {
+      window.open(url, '_blank');
+    }
+  }
+
+  function shareEvent() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.switchInlineQuery(ev.title, ['users', 'groups']);
+    } else {
+      window.Telegram?.WebApp?.showAlert('Поделиться можно только внутри Telegram');
+    }
+  }
+
+  function buyTicket() {
+    haptic('medium');
+    window.location.href = `checkout.html?id=${id}`;
+  }
+</script>
+</body>
+</html>

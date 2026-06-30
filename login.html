@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Войти — KidsMap</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background: var(--bg2)">
+
+<div class="login-page">
+
+  <div style="font-size:48px;margin-bottom:8px">🗺️</div>
+  <div class="logo-big">KidsMap</div>
+  <div class="tagline">Мероприятия рядом с домом<br>для ваших детей</div>
+
+  <!-- Если открыто в Telegram — можно авторизоваться автоматически -->
+  <div id="tgAuthBlock" style="display:none;margin-bottom:16px">
+    <button class="btn-primary" style="border-radius:14px;padding:14px;font-size:16px;width:100%" onclick="loginWithTelegram()">
+      ✈️ Войти через Telegram
+    </button>
+    <div class="divider">или</div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Номер телефона</label>
+    <input class="form-input" type="tel" placeholder="+996 _ _ _ _ _ _" id="phoneInput">
+  </div>
+
+  <button class="btn-primary" style="border-radius:14px;padding:14px;font-size:16px;width:100%;margin-bottom:16px"
+          onclick="sendCode()">
+    Получить код →
+  </button>
+
+  <div class="divider">или</div>
+
+  <button class="btn-social" onclick="loginGoogle()">
+    <span style="font-size:18px">G</span> Войти через Google
+  </button>
+
+  <button class="btn-social" onclick="loginApple()">
+    <span style="font-size:18px">🍎</span> Войти через Apple
+  </button>
+
+  <p class="terms">
+    Регистрируясь, вы соглашаетесь с<br>
+    <a href="#">Условиями использования</a> и <a href="#">Политикой конфиденциальности</a>
+  </p>
+
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // Если мы внутри Telegram — показываем кнопку быстрого входа
+  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+    document.getElementById('tgAuthBlock').style.display = 'block';
+  }
+
+  function loginWithTelegram() {
+    const user = getTgUser();
+    if (user) {
+      // В реальном приложении здесь нужно верифицировать initData на сервере
+      haptic('medium');
+      window.location.href = 'index.html';
+    }
+  }
+
+  function sendCode() {
+    const phone = document.getElementById('phoneInput').value.trim();
+    if (!phone || phone.length < 10) {
+      if (window.Telegram?.WebApp) {
+        Telegram.WebApp.showAlert('Введите корректный номер телефона');
+      } else {
+        alert('Введите корректный номер телефона');
+      }
+      return;
+    }
+    haptic('medium');
+    // В реальном приложении здесь отправляется SMS через ваш бэкенд
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.showAlert('Код отправлен на ' + phone + '\n\n(В реальном приложении здесь был бы SMS)');
+    }
+    // Для демо — сразу переходим
+    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+  }
+
+  function loginGoogle() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.openLink('https://accounts.google.com/signin');
+    }
+  }
+
+  function loginApple() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.showAlert('Вход через Apple будет доступен в следующей версии.');
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Оплата — KidsMap</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div style="padding-bottom: 100px">
+
+  <div style="background:var(--bg2);padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(0,0,0,0.06)">
+    <button onclick="history.back()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text)">←</button>
+    <span style="font-size:18px;font-weight:700">Оформление билета</span>
+  </div>
+
+  <!-- EVENT SUMMARY -->
+  <div style="margin:14px 16px;background:var(--bg2);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#b2e0e8,#f9c0a0);display:flex;align-items:center;justify-content:center;font-size:26px" id="co-emoji">🎨</div>
+      <div>
+        <div style="font-size:16px;font-weight:700" id="co-title">Рисование акварелью</div>
+        <div style="font-size:13px;color:var(--hint)" id="co-meta">Пн, Ср, Пт · 15:00–16:30</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHILD SELECTION -->
+  <div style="margin:0 16px;background:var(--bg2);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)">
+    <div class="section-label">Для кого билет?</div>
+
+    <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(0,0,0,0.05);cursor:pointer">
+      <input type="radio" name="child" value="amina" checked style="accent-color:var(--accent)">
+      <span style="font-size:20px">🧒</span>
+      <div>
+        <div style="font-size:15px;font-weight:600">Амина</div>
+        <div style="font-size:13px;color:var(--hint)">7 лет</div>
+      </div>
+    </label>
+
+    <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer">
+      <input type="radio" name="child" value="daniyar" style="accent-color:var(--accent)">
+      <span style="font-size:20px">👦</span>
+      <div>
+        <div style="font-size:15px;font-weight:600">Данияр</div>
+        <div style="font-size:13px;color:var(--hint)">5 лет</div>
+      </div>
+    </label>
+  </div>
+
+  <!-- DATE SELECTION -->
+  <div style="margin:14px 16px;background:var(--bg2);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)">
+    <div style="font-size:14px;font-weight:700;margin-bottom:10px">Выберите дату первого занятия</div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">
+      <button class="date-chip active-date" onclick="selectDate(this, 'Пт, 27 июня')">
+        <div style="font-size:11px;color:inherit">ПТ</div>
+        <div style="font-size:18px;font-weight:700">27</div>
+        <div style="font-size:11px;color:inherit">июня</div>
+      </button>
+      <button class="date-chip" onclick="selectDate(this, 'Пн, 30 июня')">
+        <div style="font-size:11px;color:inherit">ПН</div>
+        <div style="font-size:18px;font-weight:700">30</div>
+        <div style="font-size:11px;color:inherit">июня</div>
+      </button>
+      <button class="date-chip" onclick="selectDate(this, 'Ср, 2 июля')">
+        <div style="font-size:11px;color:inherit">СР</div>
+        <div style="font-size:18px;font-weight:700">2</div>
+        <div style="font-size:11px;color:inherit">июля</div>
+      </button>
+      <button class="date-chip" onclick="selectDate(this, 'Пт, 4 июля')">
+        <div style="font-size:11px;color:inherit">ПТ</div>
+        <div style="font-size:18px;font-weight:700">4</div>
+        <div style="font-size:11px;color:inherit">июля</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- PRICE BREAKDOWN -->
+  <div style="margin:0 16px;background:var(--bg2);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)">
+    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px">
+      <span style="color:var(--hint)">Стоимость занятия</span>
+      <span id="co-price">500 с</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px">
+      <span style="color:var(--hint)">Сервисный сбор</span>
+      <span>0 с</span>
+    </div>
+    <div style="height:1px;background:rgba(0,0,0,0.08);margin:10px 0"></div>
+    <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:700">
+      <span>Итого</span>
+      <span id="co-total">500 с</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- STICKY PAY BUTTON -->
+<div style="position:fixed;bottom:0;left:0;right:0;background:var(--bg2);padding:14px 16px;border-top:1px solid rgba(0,0,0,0.07)">
+  <button class="btn-primary" style="width:100%;padding:16px;font-size:17px" onclick="pay()">
+    Оплатить 500 с
+  </button>
+</div>
+
+<style>
+  .date-chip {
+    flex-shrink: 0;
+    background: var(--bg);
+    border: 1.5px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--hint);
+    transition: all 0.2s;
+    min-width: 60px;
+  }
+  .active-date {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+</style>
+
+<script src="js/app.js"></script>
+<script>
+  const events = {
+    watercolor: { emoji:'🎨', bg:'linear-gradient(135deg,#b2e0e8,#f9c0a0)', title:'Рисование акварелью', schedule:'Пн, Ср, Пт · 15:00–16:30', price:'500 с' },
+    football:   { emoji:'⚽', bg:'linear-gradient(135deg,#a8d8a8,#b8e0f0)', title:'Футбол для малышей',   schedule:'Сб, Вс · 10:00–11:30',   price:'400 с' },
+    theatre:    { emoji:'🎭', bg:'linear-gradient(135deg,#e8c0e8,#f0d0b8)', title:'Театральный кружок',   schedule:'Вт, Чт · 16:00–17:30',   price:'350 с' },
+    chess:      { emoji:'♟️', bg:'linear-gradient(135deg,#ffd8a8,#ffe8c0)', title:'Шахматная школа',      schedule:'Пн–Пт · 14:00–15:00',   price:'600 с' },
+    swim:       { emoji:'🏊', bg:'linear-gradient(135deg,#a0d4f0,#c8f0e8)', title:'Плавание для детей',   schedule:'Сб, Вс · 09:00–10:00',   price:'700 с' },
+    english:    { emoji:'🔤', bg:'linear-gradient(135deg,#f8e0a0,#f0c8d0)', title:'Английский для малышей', schedule:'Пн, Ср · 11:00–12:00', price:'550 с' }
+  };
+
+  const id = new URLSearchParams(location.search).get('id') || 'watercolor';
+  const ev = events[id] || events.watercolor;
+
+  document.getElementById('co-emoji').textContent = ev.emoji;
+  document.getElementById('co-emoji').style.background = ev.bg;
+  document.getElementById('co-title').textContent = ev.title;
+  document.getElementById('co-meta').textContent = ev.schedule;
+  document.getElementById('co-price').textContent = ev.price;
+  document.getElementById('co-total').textContent = ev.price;
+  document.querySelector('.btn-primary').textContent = 'Оплатить ' + ev.price;
+
+  function selectDate(el, label) {
+    document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active-date'));
+    el.classList.add('active-date');
+    haptic('light');
+  }
+
+  function pay() {
+    haptic('medium');
+    if (window.Telegram?.WebApp) {
+      // В реальном приложении здесь вызывается Telegram.WebApp.openInvoice(invoiceUrl)
+      // или интеграция с платёжным провайдером через бэкенд
+      Telegram.WebApp.showPopup({
+        title: '✅ Заказ оформлен!',
+        message: `Билет на "${ev.title}" успешно забронирован. Детали отправлены в чат.`,
+        buttons: [{ type: 'ok' }]
+      }, () => {
+        window.location.href = 'tickets.html';
+      });
+    } else {
+      alert('Билет куплен! (демо)');
+      window.location.href = 'tickets.html';
+    }
+  }
+</script>
+</body>
+</html>

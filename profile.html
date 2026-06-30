@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Профиль — KidsMap</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div style="padding-bottom: calc(var(--nav-h) + 16px)">
+
+  <!-- PROFILE HEADER -->
+  <div class="profile-header" style="padding-top: env(safe-area-inset-top, 20px)">
+    <div class="avatar-circle" id="userAvatar">АМ</div>
+    <div class="profile-name" id="userName">Айгуль Мамытова</div>
+    <div class="profile-email" id="userHandle">@aigul_m</div>
+  </div>
+
+  <!-- CHILDREN -->
+  <div class="section-card">
+    <div class="section-label">Мои дети</div>
+
+    <div class="child-item" id="childrenList">
+      <div class="child-avatar">🧒</div>
+      <div class="child-info">
+        <div class="name">Амина</div>
+        <div class="age">7 лет</div>
+      </div>
+    </div>
+
+    <div class="child-item">
+      <div class="child-avatar">👦</div>
+      <div class="child-info">
+        <div class="name">Данияр</div>
+        <div class="age">5 лет</div>
+      </div>
+    </div>
+
+    <button class="add-child-btn" onclick="addChild()">
+      ＋ Добавить ребёнка
+    </button>
+  </div>
+
+  <!-- MENU -->
+  <div class="section-card" style="margin-top:14px">
+    <a href="favorites.html" class="menu-item">
+      <span>❤️ Избранное</span>
+      <span class="chevron">›</span>
+    </a>
+    <a href="tickets.html" class="menu-item">
+      <span>🎟 История билетов</span>
+      <span class="chevron">›</span>
+    </a>
+    <div class="menu-item" onclick="showPayments()">
+      <span>💳 История платежей</span>
+      <span class="chevron">›</span>
+    </div>
+    <div class="menu-item" onclick="showNotifications()">
+      <span>🔔 Уведомления</span>
+      <span class="chevron">›</span>
+    </div>
+    <div class="menu-item" onclick="showSupport()">
+      <span>💬 Поддержка</span>
+      <span class="chevron">›</span>
+    </div>
+  </div>
+
+  <div style="padding: 14px 16px">
+    <button style="width:100%;background:none;border:1.5px solid rgba(200,0,0,0.2);border-radius:14px;padding:14px;font-size:15px;font-weight:600;color:#cc2222;cursor:pointer"
+            onclick="logout()">
+      Выйти
+    </button>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>Главная</span>
+  </a>
+  <a href="favorites.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Избранное</span>
+  </a>
+  <a href="tickets.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/></svg>
+    <span>Билеты</span>
+  </a>
+  <a href="profile.html" class="nav-item active">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
+    <span>Профиль</span>
+  </a>
+</nav>
+
+<script src="js/app.js"></script>
+<script>
+  // Подставляем данные из Telegram
+  const user = getTgUser();
+  if (user) {
+    const initials = (user.first_name?.[0] || '') + (user.last_name?.[0] || '');
+    document.getElementById('userAvatar').textContent = initials || '👤';
+    document.getElementById('userName').textContent = [user.first_name, user.last_name].filter(Boolean).join(' ');
+    document.getElementById('userHandle').textContent = user.username ? '@' + user.username : '';
+  }
+
+  function addChild() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.showPopup({
+        title: 'Добавить ребёнка',
+        message: 'Эта функция будет доступна в следующей версии. Хотите получить уведомление?',
+        buttons: [
+          { id: 'notify', type: 'default', text: 'Да, уведомить' },
+          { type: 'cancel' }
+        ]
+      });
+    } else {
+      alert('Добавить ребёнка');
+    }
+  }
+
+  function showPayments() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.showAlert('История платежей появится в следующей версии.');
+    }
+  }
+
+  function showNotifications() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.requestWriteAccess((allowed) => {
+        if (allowed) {
+          Telegram.WebApp.showAlert('✅ Уведомления включены! Вы будете получать новости о мероприятиях.');
+        } else {
+          Telegram.WebApp.showAlert('Вы отказались от уведомлений.');
+        }
+      });
+    }
+  }
+
+  function showSupport() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.openTelegramLink('https://t.me/kidsmap_support');
+    }
+  }
+
+  function logout() {
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.showConfirm('Вы уверены, что хотите выйти?', (confirmed) => {
+        if (confirmed) Telegram.WebApp.close();
+      });
+    }
+  }
+</script>
+</body>
+</html>
